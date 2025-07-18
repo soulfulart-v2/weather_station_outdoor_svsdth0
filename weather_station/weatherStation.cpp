@@ -8,6 +8,7 @@ weatherStation::weatherStation(){
 void weatherStation::startReadWeather(){
 
     this->checkWindDirection();
+    this->checkWindSpeed();
     this->generateMessage();
     delay(time_read_ms);
 
@@ -37,9 +38,27 @@ void weatherStation::checkWindDirection(){
 
 }
 
+void weatherStation::checkWindSpeed(){
+    int number_turns = 0, iterator = 0;
+
+    for (iterator = 0; iterator < turn_count; iterator++){
+        this->speed_digital_measure[iterator] = digitalRead(D0);
+        delay(delay_wind_speed_ms);
+    }
+
+    for (iterator = 1; iterator < turn_count; iterator++){
+        if (this->speed_digital_measure[iterator] != this->speed_digital_measure[iterator - 1]){
+            number_turns = number_turns + 1;
+        }
+    }
+
+    this->speed_kmh = number_turns * km_per_turn;
+
+}
+
 void weatherStation::generateMessage(){
 
-    String final_message = weather_message + wind_direction_value;
+    String final_message = weather_message + wind_direction_value + ", Speed: " + String(this->speed_kmh);
     Serial.println(final_message);
 
 }
