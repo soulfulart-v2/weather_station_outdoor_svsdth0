@@ -66,12 +66,6 @@ void weatherStation::checkTempHum(){
 
 void weatherStation::generateMessage(){
 
-
-    /*String final_message = weather_message
-     + wind_direction_value + 
-     ", Speed: " + String(this->speed_kmh) +
-     ", Temp: " + String(this->temperature) +
-     ", Humidity: " + String(this->humidity);*/
     this->weather_message = raw_weather_message;
     this->weather_message.replace("#TEMP#", String(this->temperature));
     this->weather_message.replace("#HUM#", String(this->humidity));
