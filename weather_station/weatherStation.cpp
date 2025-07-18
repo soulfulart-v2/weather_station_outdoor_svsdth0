@@ -1,6 +1,4 @@
-#include "Arduino.h"
 #include "weatherStation.h"
-#include <map>
 
 weatherStation::weatherStation(){
 }
@@ -9,6 +7,7 @@ void weatherStation::startReadWeather(){
 
     this->checkWindDirection();
     this->checkWindSpeed();
+    this->checkTempHum();
     this->generateMessage();
     delay(time_read_ms);
 
@@ -56,9 +55,28 @@ void weatherStation::checkWindSpeed(){
 
 }
 
+void weatherStation::checkTempHum(){
+
+    DHT11 dht_sensor_0(DHT11PIN);
+
+    // Attempt to read the temperature and humidity values from the DHT11 sensor.
+    int result = dht_sensor_0.readTemperatureHumidity(this->temperature, this->humidity);
+
+}
+
 void weatherStation::generateMessage(){
 
-    String final_message = weather_message + wind_direction_value + ", Speed: " + String(this->speed_kmh);
-    Serial.println(final_message);
+
+    /*String final_message = weather_message
+     + wind_direction_value + 
+     ", Speed: " + String(this->speed_kmh) +
+     ", Temp: " + String(this->temperature) +
+     ", Humidity: " + String(this->humidity);*/
+    this->weather_message = raw_weather_message;
+    this->weather_message.replace("#TEMP#", String(this->temperature));
+    this->weather_message.replace("#HUM#", String(this->humidity));
+    this->weather_message.replace("#WINDDIR#", this->wind_direction_value);
+    this->weather_message.replace("#WINDS#", String(this->speed_kmh));
+    Serial.println(this->weather_message);
 
 }
