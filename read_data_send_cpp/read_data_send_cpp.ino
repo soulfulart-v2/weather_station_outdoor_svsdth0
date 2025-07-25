@@ -2,6 +2,8 @@
 
 weatherStation weatherStation_zero;
 
+int count_it = 0;
+
 void setup(){
   Serial.begin(9600);
   pinMode (D0, INPUT);

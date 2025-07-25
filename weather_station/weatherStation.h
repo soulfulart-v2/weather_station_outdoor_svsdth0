@@ -4,6 +4,10 @@
 #include "Arduino.h"
 #include <map>
 #include <DHT11.h>
+#include <WiFiUdp.h>
+#include <NTPClient.h>
+#include <ESP8266WiFi.h>
+#include <WiFiClientSecure.h>
 
 #define delta_voltage 5
 #define time_read_ms 3000
@@ -23,16 +27,21 @@ class weatherStation{
         //variables
         String wind_direction_value = "OO";
         String weather_message = "replace";
-        const String raw_weather_message = "{\"time\": \"#TIME#\", \"model\": \"ws2032\", \"id\": 24788, \"temperature_c\": #TEMP#, \"humidity\": #HUM#, \"wind_dir_deg\": #WINDDIR#, \"wind_avg_km_h\": #WINDS#}";
+        const String raw_weather_message = "{\"time\": \"#TIME#\", \"model\": \"ws2032\", \"id\": 24788, \"temperature_c\": #TEMP#, \"humidity\": #HUM#, \"wind_dir_deg\": #WINDDIR#, \"wind_avg_km_h\": #WINDS#, \"local_ip\": #LOCAL_IP#}";
         int speed_digital_measure[turn_count];
         int speed_kmh = -1;
         int temperature = 0, humidity = 0;
+        String wifi_ssid = "", wifi_pass = "";
+        String local_ip = "255.255.255.0";
 
         //methods
+        String getCurrentDate();
+        void checkConnection();
         void checkWindDirection ();
         void checkWindSpeed();
         void checkTempHum();
         void generateMessage();
+        void setWifiNamePass();
 
 };
 
