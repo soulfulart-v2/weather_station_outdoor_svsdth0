@@ -5,11 +5,7 @@ weatherStation::weatherStation(){
 
 void weatherStation::startReadWeather(){
 
-    this->checkWindDirection();
-    this->checkWindSpeed();
-    this->checkTempHum();
-    this->checkConnection();
-    this->generateMessage();
+    this->commandManager();
     delay(time_read_ms);
 
 }
@@ -75,6 +71,9 @@ void weatherStation::checkConnection(){
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
+        if (Serial.available()) {
+            break;
+        }
     }
 
     this->local_ip = WiFi.localIP().toString();
@@ -136,6 +135,28 @@ String weatherStation::getCurrentDate(){
 
 }
 
+void weatherStation::setWifiNamePass(){
+
+        Serial.println("Type wifi name:");
+
+        delay(100); //wait serial stop    
+
+        while (!Serial.available()){
+            delay(100);
+        }
+
+        this->wifi_ssid = Serial.readStringUntil('\n');
+    
+        Serial.println("Type wifi password:");
+
+        while (!Serial.available()){
+            delay(100);
+        }
+
+        this->wifi_pass = Serial.readStringUntil('\n');
+
+}
+
 void weatherStation::generateMessage(){
 
     this->weather_message = raw_weather_message;
@@ -147,4 +168,33 @@ void weatherStation::generateMessage(){
     this->weather_message.replace("#LOCAL_IP#", String(this->local_ip));
     Serial.println(this->weather_message);
 
+}
+
+void weatherStation::commandManager(){
+
+    if (Serial.available()) {
+
+        String receivedString = Serial.readStringUntil('\n'); // Read until newline
+        receivedString.toLowerCase();        
+
+        if (receivedString == "setup"){
+            this->setWifiNamePass();
+        }
+
+        else {
+            this->genericCommand();
+        }
+
+    }
+
+    this->genericCommand();
+
+}
+
+void weatherStation::genericCommand(){
+    this->checkWindDirection();
+    this->checkWindSpeed();
+    this->checkTempHum();
+    this->checkConnection();
+    this->generateMessage();
 }

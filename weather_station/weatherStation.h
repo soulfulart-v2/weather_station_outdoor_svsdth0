@@ -42,6 +42,8 @@ class weatherStation{
         void checkTempHum();
         void generateMessage();
         void setWifiNamePass();
+        void commandManager();
+        void genericCommand();
 
 };
 
