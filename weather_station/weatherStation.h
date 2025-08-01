@@ -27,10 +27,11 @@ class weatherStation{
         //variables
         String wind_direction_value = "OO";
         String weather_message = "replace";
-        const String raw_weather_message = "{\"time\": \"#TIME#\", \"model\": \"ws2032\", \"id\": 24788, \"temperature_c\": #TEMP#, \"humidity\": #HUM#, \"wind_dir_deg\": #WINDDIR#, \"wind_avg_km_h\": #WINDS#, \"local_ip\": #LOCAL_IP#}";
+        const String raw_weather_message = "{\"time\": \"#TIME#\", \"model\": \"ws2032\", \"id\": 24788, \"temperature_c\": #TEMP#, \"humidity\": #HUM#, \"wind_dir_deg\": #WINDDIR#, \"wind_avg_km_h\": #WINDS#, \"local_ip\": #LOCAL_IP#, \"latitude\": #LATITUDE#, \"longitude\": #LONGITUDE#}";
         int speed_digital_measure[turn_count];
         int speed_kmh = -1;
         int temperature = 0, humidity = 0;
+        String latitude = "00.0000", longitude = "00.0000";
         String wifi_ssid = "", wifi_pass = "";
         String local_ip = "255.255.255.0";
 
@@ -44,6 +45,7 @@ class weatherStation{
         void setWifiNamePass();
         void commandManager();
         void genericCommand();
+        void setPosition();
 
 };
 

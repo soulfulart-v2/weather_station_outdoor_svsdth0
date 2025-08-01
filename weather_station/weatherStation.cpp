@@ -139,15 +139,17 @@ void weatherStation::setWifiNamePass(){
 
         Serial.println("Type wifi name:");
 
-        delay(100); //wait serial stop    
+        delay(100); //wait serial stop
 
         while (!Serial.available()){
             delay(100);
         }
 
         this->wifi_ssid = Serial.readStringUntil('\n');
+
+        Serial.println("you typed" + this->wifi_ssid);
     
-        Serial.println("Type wifi password:");
+        delay(100);
 
         while (!Serial.available()){
             delay(100);
@@ -166,6 +168,8 @@ void weatherStation::generateMessage(){
     this->weather_message.replace("#WINDDIR#", this->wind_direction_value);
     this->weather_message.replace("#WINDS#", String(this->speed_kmh));
     this->weather_message.replace("#LOCAL_IP#", String(this->local_ip));
+    this->weather_message.replace("#LATITUDE#", this->latitude);
+    this->weather_message.replace("#LONGITUDE#", this->longitude);
     Serial.println(this->weather_message);
 
 }
@@ -175,10 +179,14 @@ void weatherStation::commandManager(){
     if (Serial.available()) {
 
         String receivedString = Serial.readStringUntil('\n'); // Read until newline
-        receivedString.toLowerCase();        
+        receivedString.toLowerCase();
 
-        if (receivedString == "setup"){
+        if (receivedString == "setwifi"){
             this->setWifiNamePass();
+        }
+
+        if (receivedString == "setposition"){
+            this->setPosition();
         }
 
         else {
@@ -192,9 +200,33 @@ void weatherStation::commandManager(){
 }
 
 void weatherStation::genericCommand(){
+
     this->checkWindDirection();
     this->checkWindSpeed();
     this->checkTempHum();
     this->checkConnection();
     this->generateMessage();
+
+}
+
+void weatherStation::setPosition(){
+
+        Serial.println("Type latitude:");
+
+        delay(100); //wait serial stop
+
+        while (!Serial.available()){
+            delay(100);
+        }
+
+        this->latitude = Serial.readStringUntil('\n');
+    
+        Serial.println("Type longitude:");
+
+        while (!Serial.available()){
+            delay(100);
+        }
+
+        this->longitude = Serial.readStringUntil('\n');
+
 }
