@@ -54,10 +54,12 @@ void weatherStation::checkWindSpeed(){
 
 void weatherStation::checkTempHum(){
 
+    int local_temp = 0;
+
     DHT11 dht_sensor_0(DHT11PIN);
 
     // Attempt to read the temperature and humidity values from the DHT11 sensor.
-    int result = dht_sensor_0.readTemperatureHumidity(this->temperature, this->humidity);
+    dht_sensor_0.readTemperatureHumidity(this->temperature, this->humidity);
 
 }
 

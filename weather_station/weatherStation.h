@@ -14,7 +14,7 @@
 #define delay_wind_speed_ms 1
 #define turn_count 2000
 #define km_per_turn 2.4
-#define DHT11PIN D2
+#define DHT11PIN D4
 
 class weatherStation{
 
